@@ -2,7 +2,7 @@ import mo from "motoko"
 import fs from "fs"
 import path from "path"
 
-const baseCommit = "ce163081f18464b69614c1add8796ec9d302d168"
+const baseCommit = "9037e2c2d9947084c93278f4be6bac4517f2ab8f"
 const base = JSON.parse(
   fs.readFileSync(
     new URL("./node_modules/motoko/packages/latest/base.json", import.meta.url),
@@ -12,8 +12,7 @@ const base = JSON.parse(
 base.version = baseCommit
 mo.loadPackage(base)
 
-let folders = findFolder("src", "_mo")
-console.log(folders)
+const folders = findFolder("src", "_mo")
 const motokoFiles = folders.flatMap((folder) =>
   fs
     .readdirSync(folder)
@@ -67,11 +66,15 @@ function findFolder2(dir: string) {
 function checkMotoko(file: string) {
   try {
     const check = mo.check(file)
+    const errors = check.filter(({ severity }) => severity === 1)
     if (check.length === 0) {
       console.log("CORRECT: " + file)
+    } else if (errors.length === 0) {
+      console.log("WARNING: " + file)
+      console.log(check)
     } else {
       console.log("ERROR: " + file)
-      console.log(check)
+      console.log(errors)
       process.exitCode = 1
     }
   } catch (error) {

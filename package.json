@@ -2,7 +2,7 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^18.11.18",
-    "motoko": "^3.3.0",
+    "motoko": "3.6.3",
     "tsc": "^2.0.4",
     "vite": "^4.2.0"
   },
